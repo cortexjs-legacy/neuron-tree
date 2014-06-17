@@ -2,6 +2,17 @@
 
 Utilities to generate the `config.tree` for [neuron](https://github.com/kaelzhang/neuron).
 
+```
+<name>: {
+  <version>: {
+    // dependencies and async dependencies
+    <dep-name>: {
+      <dep-range>: <dep-version>
+    }
+  }
+}
+```
+
 ## Install
 
 ```bash
@@ -30,17 +41,6 @@ tree.parse(shrinked);
 - type `String` available types: `'dependencies'`, `'asyncDependencies'`, `'engines'`, `devDependencies`
 
 Parses the shrinked B+ tree, and generates a simpler tree for `config.tree` of neuron.
-
-```
-<name>: {
-  <version>: {
-    // dependencies and async dependencies
-    <dep-name>: {
-      <dep-range>: <dep-version>
-    }
-  }
-}
-```
 
 ## License
 
