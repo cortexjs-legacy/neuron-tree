@@ -1,7 +1,7 @@
 {
   "name": "neuron-tree",
   "version": "0.1.0",
-  "description": "neuron-tree",
+  "description": "Generates the config.tree of neuron",
   "main": "index.js",
   "scripts": {
     "test": "make test"
@@ -11,7 +11,11 @@
     "url": "git://github.com/cortexjs/neuron-tree.git"
   },
   "keywords": [
-    "neuron-tree"
+    "neuron",
+    "config",
+    "shrinked",
+    "shrinkwrap"
+    "tree"
   ],
   "engines": { 
     "node": ">=0.11.0"

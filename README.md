@@ -1,6 +1,6 @@
 # neuron-tree [![NPM version](https://badge.fury.io/js/neuron-tree.svg)](http://badge.fury.io/js/neuron-tree) [![Build Status](https://travis-ci.org/cortexjs/neuron-tree.svg?branch=master)](https://travis-ci.org/cortexjs/neuron-tree) [![Dependency Status](https://gemnasium.com/cortexjs/neuron-tree.svg)](https://gemnasium.com/cortexjs/neuron-tree)
 
-<!-- description -->
+Utilities to generate the `config.tree` for [neuron](https://github.com/kaelzhang/neuron).
 
 ## Install
 
@@ -11,10 +11,28 @@ $ npm install neuron-tree --save
 ## Usage
 
 ```js
-var neuron_tree = require('neuron-tree');
+var tree = require('neuron-tree');
+tree.parse(shrinked);
 ```
 
-## Licence
+### tree.parse(shrinked)
+
+- shrinked `Object` the shrinked object of [shrinked](https://www.npmjs.org/package/shrinked)
+
+Parses the shrinked B+ tree, and generates a simpler tree for `config.tree` of neuron.
+
+```
+<name>: {
+  <version>: {
+    // dependencies and async dependencies
+    <dep-name>: {
+      <dep-range>: <dep-version>
+    }
+  }
+}
+```
+
+## License
 
 MIT
 <!-- do not want to make nodeinit to complicated, you can edit this whenever you want. -->
