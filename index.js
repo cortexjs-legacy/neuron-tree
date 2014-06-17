@@ -21,15 +21,19 @@ exports.parse = function (shrinked, types) {
   types || (types = DEFAULT_TYPES);
   exports._each(shrinked, function (name, version, deps) {
     var merged_deps = {};
-    var versions = parsed[name] || (parsed[name] = {});
 
     // Maintains order, and the latter one has higher priority.
     TYPES.forEach(function (type) {
       if (~types.indexOf(type) && (type in deps)) {
-        exports._mix(merged_deps, deps[type]);
+        exports._merge(merged_deps, deps[type]);
       }
     });
 
+    if (exports._is_empty(merged_deps)) {
+      return;
+    }
+
+    var versions = parsed[name] || (parsed[name] = {});
     versions[version] = merged_deps;
   });
 
@@ -49,6 +53,8 @@ var DEFAULT_TYPES = [
   "dependencies"
 ];
 
+
+// double each
 exports._each = function (object, iterator) {
   var a;
   var value;
@@ -64,20 +70,23 @@ exports._each = function (object, iterator) {
 };
 
 
-exports._mix = function (receiver, supplier, override){
+exports._is_empty = function (object) {
   var key;
-
-  if(arguments.length === 2){
-    override = true;
+  for (key in object) {
+    return false;
   }
+  return true;
+};
 
+
+// Deep merge
+exports._merge = function (receiver, supplier){
   if (Object(supplier) !== supplier) {
     return;
   }
 
-  for(key in supplier){
-    if(override || !(key in receiver)){
-        receiver[key] = supplier[key]
-    }
-  }
+  exports._each(supplier, function (name, range, version) {
+    var ranges = receiver[name] || (receiver[name] = {});
+    ranges[range] = version;
+  });
 };
