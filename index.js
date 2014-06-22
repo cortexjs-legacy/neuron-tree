@@ -20,21 +20,28 @@ exports.parse = function (shrinked, types) {
   var parsed = {};
   types || (types = DEFAULT_TYPES);
   exports._each(shrinked, function (name, version, deps) {
-    var merged_deps = {};
+    var merged_sync_deps = {};
+    var merged_async_deps = {};
 
     // Maintains order, and the latter one has higher priority.
     TYPES.forEach(function (type) {
       if (~types.indexOf(type) && (type in deps)) {
-        exports._merge(merged_deps, deps[type]);
+        var dest = IS_ASYNC[type]
+          ? merged_async_deps
+          : merged_sync_deps;
+        exports._merge(dest, deps[type]);
       }
     });
 
-    if (exports._is_empty(merged_deps)) {
+    if (
+      exports._is_empty(merged_sync_deps)
+      && exports._is_empty(merged_async_deps)
+    ) {
       return;
     }
 
     var versions = parsed[name] || (parsed[name] = {});
-    versions[version] = merged_deps;
+    versions[version] = [merged_sync_deps, merged_async_deps];
   });
 
   return parsed;
@@ -47,6 +54,13 @@ var TYPES = [
   "dependencies",
   "engines"
 ];
+
+var IS_ASYNC = {
+  "devDependencies": false,
+  "asyncDependencies": true,
+  "dependencies": false,
+  "engines": false
+};
 
 var DEFAULT_TYPES = [
   "asyncDependencies",
