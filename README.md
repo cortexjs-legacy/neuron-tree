@@ -6,11 +6,21 @@ Utilities to generate the `config.tree` for [neuron](https://github.com/kaelzhan
 <name>: {
   <version>: {
     // dependencies and async dependencies
-    <dep-name>: {
-      <dep-range>: <dep-version>
-    }
+    <dep-name>: [
+      // synchronous dependencies
+      {
+        <sync-dep-range>: <sync-dep-version>
+        ...
+      },
+      // asynchronous dependencies
+      {
+        <async-dep-range>: <async-dep-version>
+        ...
+      }
+    ]
   }
 }
+...
 ```
 
 ## Install
