@@ -13,7 +13,8 @@ var fs = require('fs');
 // - dependencyKeys {(Array.<string>)}
 // - built_root {path}
 // - shrinkwrap {Object=}
-function tree (cwd, pkg, options, callback) {
+// - cwd {path}
+function tree (pkg, options, callback) {
   options || (options = {});
   (options.dependencyKeys) || (options.dependencyKeys = ['dependencies', 'asyncDependencies']);
 
@@ -23,7 +24,7 @@ function tree (cwd, pkg, options, callback) {
         return done(null);
       }
 
-      tree.read_shrinkwrap(cwd, pkg, options, function (err, tree) {
+      tree.read_shrinkwrap(pkg, options, function (err, tree) {
         if (err) {
           return done(err);
         }
@@ -39,19 +40,24 @@ function tree (cwd, pkg, options, callback) {
 
     options.shrinkwrap.version = pkg.version;
     var keys = options.dependencyKeys;
-
-    var shrinked_tree = shrinked.parse(options.shrinkwrap, {
-      dependencyKeys: keys
-    });
-
-    var result = tree.parse_shrinked(shrinked_tree, keys);
+    var result = tree.parse(pkg, options.shrinkwrap, keys);
     callback(null, result);
   });
 };
 
 
-tree.read_shrinkwrap = function (cwd, pkg, options, callback) {
-  var shrinkwrap_json = node_path.join(cwd, 'cortex-shrinkwrap.json');
+tree.parse = function (pkg, shrinkwrap_object, keys) {
+  var shrinked_tree = shrinked.parse(shrinkwrap_object, {
+    dependencyKeys: keys
+  });
+
+  var result = tree.parse_shrinked(shrinked_tree, keys);
+  return result;
+};
+
+
+tree.read_shrinkwrap = function (pkg, options, callback) {
+  var shrinkwrap_json = node_path.join(options.cwd, 'cortex-shrinkwrap.json');
 
   fs.exists(shrinkwrap_json, function(exists) {
     if (exists) {

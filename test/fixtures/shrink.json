@@ -1,6 +1,5 @@
 {
   "name": "unit-m-customer",
-  "version": "0.0.0",
   "engines": {
     "neuron": {
       "from": "neuron@~5.1.0",

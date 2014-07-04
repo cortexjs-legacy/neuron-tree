@@ -41,11 +41,16 @@ var cases = {
 
 var shrinkwrap = jf.readFileSync(fixture.resolve('shrink.json'));
 var expected = require(fixture.resolve('expected'));
+var pkg = {
+  "name": "unit-m-customer"
+  "version": "0.0.0"
+};
 
 Object.keys(cases).forEach(function (type) {
   var c = cases[type];
   describe(type, function(){
-    it("tree.parse()", function(){
+    it("tree()", function(){
+      tree()
       var parsed = shrinked.parse(shrinkwrap, {
         dependencyKeys: c.types
       });
