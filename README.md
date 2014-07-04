@@ -33,16 +33,28 @@ $ npm install neuron-tree --save
 
 ```js
 var tree = require('neuron-tree');
-tree.parse(shrinked);
+tree(cwd, pkg, {
+  shrinkwrap: shrinkwrap
+}, function(err, tree){
+  // ...
+});
 ```
 
 ### tree(cwd, pkg, [options], callback)
 
-- cwd
+Generates the object tree which neuron uses as the `config.tree`.
+
+- cwd `path`
 - pkg `Object` cortex json
-- options
-  - built_root `path=`
-  - shrinkwrap `Object=`
+- options `Object=`
+  - built_root `path=` the path from where we can find all installed and built packages
+  - shrinkwrap `Object=` the object of cortex-shrinkwrap.json
+  - dependencyKeys `Array`
+
+##### Arguments Overloading
+
+- if `options.shrinkwrap` not defined, `neuron-tree` will try to read the cortex-shrinkwrap.json
+- 
 
 ### tree.parse(shrinked, dependencyKeys)
 
