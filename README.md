@@ -9,18 +9,15 @@ Utilities to generate the `config.tree` for [neuron](https://github.com/kaelzhan
     <dep-name>: [
       // synchronous dependencies
       {
-        <sync-dep-range>: <sync-dep-version>
-        ...
+        <sync-dep-range>: <sync-dep-version>, ...
       },
       // asynchronous dependencies
       {
-        <async-dep-range>: <async-dep-version>
-        ...
+        <async-dep-range>: <async-dep-version>, ...
       }
     ]
   }
 }
-...
 ```
 
 ## Install
@@ -49,7 +46,22 @@ Generates the object tree which neuron uses as the `config.tree`.
 - options `Object=`
   - built_root `path=` the path from where we can find all installed and built packages
   - shrinkwrap `Object=` the object of cortex-shrinkwrap.json
-  - dependencyKeys `Array`
+  - dependencyKeys `Array=['dependencies', 'asyncDependencies']`
+
+##### dependencyKeys
+
+The array of types of dependencies, default to 
+
+```
+[
+  "dependencies",
+  "asyncDependencies"
+]
+```
+
+You could include other keys of dependencies in the array, available keys: 
+
+`'dependencies'`, `'asyncDependencies'`, `'engines'`, `devDependencies`
 
 ##### Arguments Overloading
 
@@ -59,16 +71,7 @@ Generates the object tree which neuron uses as the `config.tree`.
 ### tree.parse(shrinked, dependencyKeys)
 
 - shrinked `Object` the shrinked object of [shrinked](https://www.npmjs.org/package/shrinked)
-- dependencyKeys `Array.<type>` the array of types of dependencies, default to 
-
-  [
-    "dependencies",
-    "asyncDependencies"
-  ]
-
-  you could include other keys of dependencies in the array.
-
-- type `String` available keys: `'dependencies'`, `'asyncDependencies'`, `'engines'`, `devDependencies`
+- dependencyKeys `Array.<String>`
 
 Parses the shrinked B+ tree, and generates a simpler tree for `config.tree` of neuron.
 
