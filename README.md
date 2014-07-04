@@ -36,19 +36,27 @@ var tree = require('neuron-tree');
 tree.parse(shrinked);
 ```
 
-### tree.parse(shrinked, types)
+### tree(cwd, pkg, [options], callback)
+
+- cwd
+- pkg `Object` cortex json
+- options
+  - built_root `path=`
+  - shrinkwrap `Object=`
+
+### tree.parse(shrinked, dependencyKeys)
 
 - shrinked `Object` the shrinked object of [shrinked](https://www.npmjs.org/package/shrinked)
-- types `Array.<type>` the array of types of dependencies, default to 
+- dependencyKeys `Array.<type>` the array of types of dependencies, default to 
 
   [
     "dependencies",
     "asyncDependencies"
   ]
 
-  you could include other types of dependencies in the array.
+  you could include other keys of dependencies in the array.
 
-- type `String` available types: `'dependencies'`, `'asyncDependencies'`, `'engines'`, `devDependencies`
+- type `String` available keys: `'dependencies'`, `'asyncDependencies'`, `'engines'`, `devDependencies`
 
 Parses the shrinked B+ tree, and generates a simpler tree for `config.tree` of neuron.
 

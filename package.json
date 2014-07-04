@@ -1,6 +1,6 @@
 {
   "name": "neuron-tree",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Generates the config.tree of neuron",
   "main": "index.js",
   "scripts": {
@@ -31,5 +31,11 @@
     "shrinked": "~0.1.3",
     "test-fixture": "~1.0.1",
     "jsonfile": "~1.1.1"
+  },
+  "dependencies": {
+    "async": "^0.9.0",
+    "cortex-shrinkwrap": "^3.0.0",
+    "jsonfile": "^1.2.0",
+    "shrinked": "^0.1.4"
   }
 }

@@ -1,5 +1,75 @@
 'use strict';
 
+module.exports = tree;
+
+var jf = require('jsonfile');
+var shrinked = require('shrinked');
+var shrinkwrap = require('cortex-shrinkwrap');
+var async = require('async');
+var node_path = require('path');
+var fs = require('fs');
+
+// @param {Object} options
+// - dependencyKeys {(Array.<string>)}
+// - built_root {path}
+// - shrinkwrap {Object=}
+function tree (cwd, pkg, options, callback) {
+  options || (options = {});
+  (options.dependencyKeys) || (options.dependencyKeys = ['dependencies', 'asyncDependencies']);
+
+  async.parallel([
+    function (done) {
+      if (options.shrinkwrap) {
+        return done(null);
+      }
+
+      tree.read_shrinkwrap(cwd, pkg, options, function (err, tree) {
+        if (err) {
+          return done(err);
+        }
+        options.shrinkwrap = tree;
+        
+        done(null);
+      });
+    }
+  ], function (err) {
+    if (err) {
+      return callback(err);
+    }
+
+    options.shrinkwrap.version = pkg.version;
+    var keys = options.dependencyKeys;
+
+    var shrinked_tree = shrinked.parse(options.shrinkwrap, {
+      dependencyKeys: keys
+    });
+
+    var result = tree.parse_shrinked(shrinked_tree, keys);
+    callback(null, result);
+  });
+};
+
+
+tree.read_shrinkwrap = function (cwd, pkg, options, callback) {
+  var shrinkwrap_json = node_path.join(cwd, 'cortex-shrinkwrap.json');
+
+  fs.exists(shrinkwrap_json, function(exists) {
+    if (exists) {
+      return jf.readFile(shrinkwrap_json, callback);
+    }
+
+    var keys = options.dependencyKeys;
+
+    shrinkwrap(pkg, options.built_root, {
+      stableOnly: true,
+      async: ~keys.indexOf('asyncDependencies'),
+      dev: ~keys.indexOf('devDependencies')
+
+    }, callback);
+  });
+};
+
+
 // @param {Object} shrinked
 // ```
 // <name>: {
@@ -16,10 +86,10 @@
 // }
 // ```
 // @param 
-exports.parse = function (shrinked, types) {
+tree.parse_shrinked = function (shrinked, types) {
   var parsed = {};
   types || (types = DEFAULT_TYPES);
-  exports._each(shrinked, function (name, version, deps) {
+  tree._each(shrinked, function (name, version, deps) {
     var merged_sync_deps = {};
     var merged_async_deps = {};
 
@@ -29,13 +99,13 @@ exports.parse = function (shrinked, types) {
         var dest = IS_ASYNC[type]
           ? merged_async_deps
           : merged_sync_deps;
-        exports._merge(dest, deps[type]);
+        tree._merge(dest, deps[type]);
       }
     });
 
     if (
-      exports._is_empty(merged_sync_deps)
-      && exports._is_empty(merged_async_deps)
+      tree._is_empty(merged_sync_deps)
+      && tree._is_empty(merged_async_deps)
     ) {
       return;
     }
@@ -69,7 +139,7 @@ var DEFAULT_TYPES = [
 
 
 // double each
-exports._each = function (object, iterator) {
+tree._each = function (object, iterator) {
   var a;
   var value;
   var b;
@@ -84,7 +154,7 @@ exports._each = function (object, iterator) {
 };
 
 
-exports._is_empty = function (object) {
+tree._is_empty = function (object) {
   var key;
   for (key in object) {
     return false;
@@ -94,12 +164,12 @@ exports._is_empty = function (object) {
 
 
 // Deep merge
-exports._merge = function (receiver, supplier){
+tree._merge = function (receiver, supplier){
   if (Object(supplier) !== supplier) {
     return;
   }
 
-  exports._each(supplier, function (name, range, version) {
+  tree._each(supplier, function (name, range, version) {
     var ranges = receiver[name] || (receiver[name] = {});
     ranges[range] = version;
   });
