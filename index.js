@@ -14,6 +14,7 @@ var fs = require('fs');
 // - built_root {path}
 // - shrinkwrap {Object=}
 // - cwd {path}
+// - ignore_shrink_file {Boolean=false} 
 function tree (pkg, options, callback) {
   options || (options = {});
   (options.dependencyKeys) || (options.dependencyKeys = ['dependencies', 'asyncDependencies']);
@@ -59,19 +60,22 @@ tree.parse = function (pkg, shrinkwrap_object, keys) {
 tree.read_shrinkwrap = function (pkg, options, callback) {
   var shrinkwrap_json = node_path.join(options.cwd, 'cortex-shrinkwrap.json');
 
+  var keys = options.dependencyKeys;
+  var shrink_options = {
+    stableOnly: true,
+    async: ~keys.indexOf('asyncDependencies'),
+    dev: ~keys.indexOf('devDependencies')
+  };
+
+  if (options.ignore_shrink_file) {
+    return shrinkwrap(pkg, options.built_root, shrink_options, callback);
+  }
+
   fs.exists(shrinkwrap_json, function(exists) {
     if (exists) {
       return jf.readFile(shrinkwrap_json, callback);
     }
-
-    var keys = options.dependencyKeys;
-
-    shrinkwrap(pkg, options.built_root, {
-      stableOnly: true,
-      async: ~keys.indexOf('asyncDependencies'),
-      dev: ~keys.indexOf('devDependencies')
-
-    }, callback);
+    shrinkwrap(pkg, options.built_root, shrink_options, callback);
   });
 };
 

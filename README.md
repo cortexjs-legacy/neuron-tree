@@ -47,6 +47,7 @@ Generates the object tree which neuron uses as the `config.tree`.
   - built_root `path=` the path from where we can find all installed and built packages
   - shrinkwrap `Object=` the object of cortex-shrinkwrap.json
   - dependencyKeys `Array=['dependencies', 'asyncDependencies']`
+  - ignore_shrink_file `Boolean=false` if true, `neuron-tree` will always generate new shrinkwrap tree.
 
 ##### dependencyKeys
 
