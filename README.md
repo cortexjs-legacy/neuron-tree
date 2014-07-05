@@ -66,8 +66,10 @@ You could include other keys of dependencies in the array, available keys:
 
 ##### Arguments Overloading
 
-- if `options.shrinkwrap` not defined, `neuron-tree` will try to read the cortex-shrinkwrap.json
-- 
+- if `options.shrinkwrap` not defined, then:
+- if `options.ignore_shrink_file` not defined, `neuron-tree` will try to generate shrinkwrap itself, else:
+- `neuron-tree` will try to read the cortex-shrinkwrap.json, else:
+- if cortex-shrinkwrap.json not found, `neuron-tree` will try to generate shrinkwrap itself.
 
 ### tree.parse(shrinked, dependencyKeys)
 
