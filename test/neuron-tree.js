@@ -42,7 +42,7 @@ var cases = {
 var shrinkwrap = jf.readFileSync(fixture.resolve('shrink.json'));
 var expected = require(fixture.resolve('expected'));
 var pkg = {
-  "name": "unit-m-customer"
+  "name": "unit-m-customer",
   "version": "0.0.0"
 };
 
