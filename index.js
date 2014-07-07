@@ -38,8 +38,6 @@ function tree (pkg, options, callback) {
     if (err) {
       return callback(err);
     }
-
-    options.shrinkwrap.version = pkg.version;
     var keys = options.dependencyKeys;
     var result = tree.parse(pkg, options.shrinkwrap, keys);
     callback(null, result);
@@ -48,6 +46,7 @@ function tree (pkg, options, callback) {
 
 
 tree.parse = function (pkg, shrinkwrap_object, keys) {
+  shrinkwrap_object.version = pkg.version;
   var shrinked_tree = shrinked.parse(shrinkwrap_object, {
     dependencyKeys: keys
   });

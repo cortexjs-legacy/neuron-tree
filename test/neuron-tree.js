@@ -49,13 +49,8 @@ var pkg = {
 Object.keys(cases).forEach(function (type) {
   var c = cases[type];
   describe(type, function(){
-    it("tree()", function(){
-      tree()
-      var parsed = shrinked.parse(shrinkwrap, {
-        dependencyKeys: c.types
-      });
-
-      var t = tree.parse(parsed, c.types);
+    it("tree.parse()", function(){
+      var t = tree.parse(pkg, shrinkwrap, c.types);
       c.e(t, expected[type]);
     });
   });
