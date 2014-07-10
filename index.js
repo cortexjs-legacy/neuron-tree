@@ -40,7 +40,7 @@ function tree (pkg, options, callback) {
     }
     var keys = options.dependencyKeys;
     var result = tree.parse(pkg, options.shrinkwrap, keys);
-    callback(null, result);
+    callback(null, result, options.shrinkwrap);
   });
 };
 

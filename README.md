@@ -34,7 +34,7 @@ tree(pkg, {
   cwd: cwd,
   built_root: built_root,
   dependencyKeys: ['dependencies', 'asyncDependencies']
-}, function(err, tree){
+}, function(err, tree, shrinkwrap){
   // ...
 });
 ```
