@@ -30,19 +30,21 @@ $ npm install neuron-tree --save
 
 ```js
 var tree = require('neuron-tree');
-tree(cwd, pkg, {
-  shrinkwrap: shrinkwrap
+tree(pkg, {
+  cwd: cwd,
+  built_root: built_root,
+  dependencyKeys: ['dependencies', 'asyncDependencies']
 }, function(err, tree){
   // ...
 });
 ```
 
-### tree(cwd, pkg, [options], callback)
+### tree(pkg, options, callback)
 
 Generates the object tree which neuron uses as the `config.tree`.
 
 - pkg `Object` cortex json
-- options `Object=`
+- options `Object`
   - cwd `path`
   - built_root `path=` the path from where we can find all installed and built packages
   - shrinkwrap `Object=` the object of cortex-shrinkwrap.json
